@@ -82,3 +82,9 @@ c1 = Car()
 c1.drive(180)
 c1.drive(50)
 c1.drive(90)
+
+print(type(c1))
+print(dir(c1))
+print(isinstance(c1, Car))
+print(isinstance(c1, dict))
+
