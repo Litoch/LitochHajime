@@ -1,45 +1,21 @@
-from random import randint
 import requests
 
-# times = 0
-# total_round = 0
-# total_times = 0
-#
-# while True:
-#     main_menu = input("1.Start  2.Quit\n")
-#     # name = input("Please enter your name: ")
-#     if main_menu == '1':
-#         times = 0
-#         total_round += 1
-#         while True:
-#             times += 1
-#             answer = int(input('Enter a number: '))
-#             if answer < num:
-#                 print('too small')
-#             elif answer > num:
-#                 print('too big')
-#             else:
-#                 print('BINGO!')
-#                 total_times = total_times + times
-#                 print('You have guessed %d times this round!' % times)
-#                 print('You have played %d round!' % total_round)
-#                 print('The average times you guess in one round is %.2f' % (total_times/total_round))
-#                 break
-#     if main_menu == '2':
-#         print('See you next time')
-#         break
 
+def CheckInput():
+    global ans
+    try:
+        ans = int(input('Guess an number within 100: '))
+    except:
+        print('Please enter a number')
+        return False
+    else:
+        return True
 
-# function version
-
-
-
-
-from random import randint
 
 def guess(num):
     while True:
-        ans = int(input('Guess a integer within 10: '))
+        while not CheckInput():
+            pass
         if ans > num:
             print('too big')
             return False
@@ -50,17 +26,10 @@ def guess(num):
             print('BINGO!')
             return True
 
-# 指定数字
-# def play(num=0):
-#     if num == 0:
-#         num =randint(1,10)
-#     while not guess(num):
-#         pass
 
 def play():
     global times
-    times = 0
-    # avg_times = total_times / total_round
+    times = 1
     r = requests.get('https://python666.cn/cls/number/guess/')
     num = int(r.text)
     while not guess(num):
@@ -70,13 +39,86 @@ def play():
 
 total_round = 0
 total_times = 0
+times_list = []
+name = input('Please enter your name: ')
+
+
 while True:
-    choice = input('1.Start  2.Quit')
-    if choice == '1':
-        total_round += 1
-        play()
-        total_times += total_times + times
-    if choice == '2':
-        print('See you next time')
+    total_round += 1
+    play()
+    times_list.append(times)
+    total_times += total_times + times
+    choice = input('Do you want to play again? Press Y to continue. Else to quit.')
+    if choice == 'Y' or choice == 'y':
+        pass
+    else:
+        print('\nSee you next time')
         break
     #  其他输入没有影响，重复while True的循环也就是提示choice的input
+
+
+avg_times = total_times/total_round
+min_this_round = min(times_list)
+print('\n%s, you have played %d rounds.\n'
+      ' The fastest round ended with %d times.\n'
+      'The average times you guess in one round is %.2f'
+      % (name, total_round, min(times_list), avg_times))
+score = [name, str(total_round), str(min_this_round), str(avg_times)]
+
+
+records = []
+try:
+    with open('game record.txt') as f:
+        for i in f.readlines():
+            records.append(i.strip())
+except:
+    with open('game record.txt', 'w') as f:
+        pass
+
+
+# print('After read the file: ')
+# print(records)
+
+
+detailed_records = []
+for i in range(0, len(records)):
+    detailed_records.append(records[i].split())
+
+
+# print('After split:')
+# print(detailed_records)
+
+
+# update the existent records
+TF_list = []
+for i in range(0, len(records)):
+    last_total_round = int(detailed_records[i][1])
+    last_avg_times = float(detailed_records[i][3])
+    last_total_times = last_total_round * last_avg_times
+    if detailed_records[i][0] == name:
+        detailed_records[i][1] = str(last_total_round + total_round)
+        if int(detailed_records[i][2]) > min_this_round:
+            detailed_records[i][2] = str(min_this_round)
+        detailed_records[i][3] = str((last_total_times + total_times) / (last_total_round + total_round))
+        TF_list.append(True)
+    else:
+        TF_list.append(False)
+
+
+if True not in TF_list:
+    detailed_records.append(score)
+
+
+# print('\nfinal detailed records: ')
+# print(detailed_records)
+
+
+final_records = [' '.join(line) + '\n' for line in detailed_records]
+# print('\nfinal records')
+# print(final_records)
+
+
+with open('game record.txt', 'w') as f:
+    for i in final_records:
+        f.writelines(i)
+
