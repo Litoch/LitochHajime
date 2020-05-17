@@ -46,7 +46,7 @@ while True:
     total_round += 1
     play()
     times_list.append(times)
-    total_times += total_times + times
+    total_times += times
     choice = input('Do you want to play again? Press Y to continue. Else to quit.')
     if choice == 'Y' or choice == 'y':
         pass
