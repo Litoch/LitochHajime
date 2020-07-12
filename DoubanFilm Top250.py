@@ -48,6 +48,6 @@ while start < 250:
 
 print(extracted)
 
-with open('./top250.csv', 'w', encoding='utf_8_sig') as f:
+with open('./top250.csv', 'w', encoding='utf-8-sig') as f:
     f_csv = csv.writer(f)
     f_csv.writerows(extracted)
