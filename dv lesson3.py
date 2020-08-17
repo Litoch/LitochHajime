@@ -24,7 +24,7 @@ df_test = pd.DataFrame(data2, index=['a', 'c', 'e', 'f', 'h'],
 print(df_test)
 
 # 5
-df_test.loc['a', 'one'] = ""
+df_test.loc['a', 'one'] = np.nan
 df_test.loc['c', 'two'] = -99
 df_test.loc['c', 'three'] = -99
 df_test.loc['a', 'two'] = -100
