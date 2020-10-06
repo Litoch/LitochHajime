@@ -21,7 +21,7 @@ print(df['experience'].value_counts())
 print(df['education'].value_counts())
 
 # 5
-print(df['source'].value_counts())
+print(df["company_type"].value_counts())
 
 # 6
 print('\nthe MEAN of salary:')
