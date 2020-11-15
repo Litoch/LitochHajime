@@ -31,3 +31,24 @@ while True:
 # print(city_data)
 # print(city_data['forecast'])
 # print(city_data['forecast'][0])
+
+# 2020.11 update
+while True:
+    city = input('Please enter the name of CITY, ENTER to quit: \n')
+    if not city:
+        print('ByeBye :)')
+        break
+    try:
+        r = requests.get('http://wthrcdn.etouch.cn/weather_mini?city=%s' % city)
+        dic_city = r.json()
+    except:
+        print('Fail to access.')
+
+    try:
+        forecast = dic_city['data']['forecast'][0]
+        print(forecast.get('date'))
+        print(forecast.get('high'))
+        print(forecast.get('low'))
+        print(forecast.get('type'))
+    except:
+        print('No such CITY.')
